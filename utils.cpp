@@ -21,3 +21,34 @@ int32_t binaryStringToSigned32Bit(string binaryStr) {
 		return static_cast<int32_t>(static_cast<int16_t>(value));
 	}
 }
+
+
+bitset<32> bitset_add( bitset<32> a, bitset<32> b) {
+	bitset<32> result;
+	bool carry = false;
+
+	// addition from LSB to MSB
+	for (size_t i = 0; i < 32; ++i) {
+		bool bit_a = a[i];
+		bool bit_b = b[i];
+		// sum = bit_a ^ bit_b ^ carry
+		result[i] = bit_a ^ bit_b ^ carry;
+		// carry = (bit_a & bit_b) | (bit_a & carry) | (bit_b & carry)
+		carry = (bit_a & bit_b) | (bit_a & carry) | (bit_b & carry);
+	}
+	return result;
+}
+
+bitset<32> bitset_sub(bitset<32> a, bitset<32> b) {
+	bitset<32> result;
+	bool borrow = false;
+	for (size_t i = 0; i < 32; ++i) {
+		bool bit_a = a[i];
+		bool bit_b = b[i];
+		// result[i] = (bit_a - bit_b - borrow)
+		result[i] = (bit_a ^ bit_b) ^ borrow;
+		//borrow = (!bit_a & bit_b) | ((!bit_a | bit_b) & borrow)
+		borrow = (!bit_a & bit_b) | ((bit_a ^ bit_b) & borrow);
+	}
+	return result;
+}
